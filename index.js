@@ -17,14 +17,47 @@ var course = new Datastore({filename:"./db/course.db",autoload:true});
 var student = new Datastore({filename:"./db/student.db",autoload:true});
 var eligible = new Datastore({filename:"./db/eligible.db",autoload:true});
 var stucs = new Datastore({filename:"./db/stucs.db",autoload:true});
-var result =new Datastore({filename:"./db/result.db",autoload:true});
+var allot =new Datastore({filename:"./db/result.db",autoload:true});
 
-var stid;
+var stdcnt = 0;
+var hodcnt = 0;
+
 
 app.get("/",function(req,res){
-	/* if count selected student count = student count {
-		
-	}*/
+	student.count({},function(err,c){
+		if(stdcnt == c) {
+			student.find({}).sort({"cgpa": 1}.exec(function(err,result){
+					for(var i=0;i<result.length;i++){
+						var sid = result[i].Username
+						var person = {"SID":result[i].Username}
+						stucs.find(person).sort({"Priority":1}).exec(function(err,resul){
+							for(var j=0;i<resul.length;j++){
+								var cs = {"CID":resul[j].CID}
+								course.find(cs,function(err,res){
+									var str = res[0].strength;
+									var limit = res[0].max;
+									if(str<limit){
+										var ins ={
+											"SID": sid,
+											"CID": res[0].CID ,
+											"CNAME": res[0].Course
+ 										}
+										allot.insert(ins,function(err,inse){
+											console.log(inse);
+										})
+										//update
+										break;
+									}
+									else{
+
+									}
+								})
+							}
+						})
+					}
+			}))
+		}
+	})
 
     res.render('login');
 })
@@ -34,7 +67,12 @@ app.post("/loginHOD",function(req,res){
 })
 
 app.post("/loginstudent",function(req,res){
-    res.render("studentlog");
+	hod.count({},function(err,count){
+		if(count == hodcnt){
+			res.render("studentlog");
+		}
+		else
+		res.send("Courses not Uploaded");
 })
 
 app.post('/HOD',function(req,res){
@@ -45,6 +83,7 @@ app.post('/HOD',function(req,res){
 		"password":paw
 	}
 	hod.find(person,function(err,result){	
+		hodcnt++;
 		courses.find({"Department":result[0].Department}).sort({ CID:1 }).exec(function(err,resul){
 			dept.find({"DID":result[0].Department},function(err,d){
 			if(result.length>0)
@@ -84,28 +123,33 @@ app.post("/student",function(req,res){
 		"Password":paw
 	}
 	stid = user;
-	var elg=[];
+	var elg = [];
 	var dp = [];
-	student.find(person,function(err,result){
-		eligible.find({"class":result[0].class},function(err,resul){
-			for(var i=0;i<resul.length;i++){
-			elg.push(resul[i].course);
-		}
-				course.find({"CID":{$in:elg}},function(err,rlt){
-					for(var i=0;i<rlt.length;i++){
-						dp.push(rlt[i].Department);
-					}
-					dept.find({"DID":{$in:dp}},function(err,de){
-
-						if(result.length>0)
-								res.render('student',{re:rlt,dept:de})
-							else
-								res.send("No Such User");
+	
+		student.find(person,function(err,result){
+			stdcnt++;
+			eligible.find({"class":result[0].class},function(err,resul){
+				for(var i=0;i<resul.length;i++){
+				elg.push(resul[i].course);
+			}
+					course.find({"CID":{$in:elg}}).sort({CID:1}).exec(function(err,rlt){
+						for(var i=0;i<rlt.length;i++){
+							dp.push(rlt[i].Department);
+						}
+						dept.find({"DID":{$in:dp}},function(err,de){
+	
+							if(result.length>0)
+									res.render('student',{re:rlt,dept:de})
+								else
+									res.send("No Such User");
+						})
+													
 					})
-												
 				})
-			})
+		})
+		
 	})
+	
 			
 })
 
@@ -121,7 +165,8 @@ app.post("/student/course",function(req,res){
 		}
             stucs.insert(person,function(err,resul){
                 console.log(resul);
-            })
+			})
+			
         } )
     } else if (typeof cid === "object") {
         for (var i = 0; i < cid.length; i++) {
@@ -142,8 +187,15 @@ app.post("/student/course",function(req,res){
 })
 
 app.post("/result",function(req,res){
-
-	res.render('result');
+	student.count({},function(err,count){
+		if(stdcnt == count)
+		allot.find({},function(err,result){
+			res.render('result',{re:result});
+		})
+		else
+		res.send("Result Not Published")
+	})
+	
 
 })
 
