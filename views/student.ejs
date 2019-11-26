@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="css/bootstrap.min.css"></script>
+  <script src="student.js"></script>
+
+  <style>
+    .footer {
+       position: fixed;
+       right: 0;
+       bottom: 0;
+       width: 30%;
+       background-color: rgb(37, 145, 207);
+       color: white;
+       text-align: center;
+       margin: 15px;
+       padding: 6px;
+    }
+    .button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 10px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+    }
+  .button2 {background-color: #cccc00;}
+    </style>
+</head>
+
+
+<body>
+    
+    
+    
+<br>
+<br>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top ">
+    
+    <a class="navbar-brand" href="#">Choose Global Elective</a>
+    <ul>
+      <li>
+        <form action="/logout" method="get"> 
+      <button type="submit" class="btn btn-danger pull-right">Log Out</button>
+      </form>
+      </li>
+      </ul>
+
+  </nav>
+  <form action="/student/course" method="POST">
+<div class="container mt-sm-5">
+  <p>Note: The priority of courses will be in the order of selection</p>
+  <%for(var i=0;i<dept.length;i++) {%>
+  <button type="button" class="btn border border-none w-100 shadow-sm bg-white text-left" data-toggle="collapse" data-target="#<%=dept[i].DID%>"><%=dept[i].Name%></button>
+  <div id="<%= dept[i].DID %>" class="collapse">
+      <br>
+        
+            <%for(var j=0;j<re.length;j++) {%>
+                <%if(dept[i].DID == re[j].Department) {%> 
+                    <div class="input-group mb-3">
+                  <div class="input-group-prepend pr-2">
+                    <div class="input-group-text">
+                      <input type="checkbox" id="<%= re[j].CID %>" name="course" value="<%= re[j].CID %>" class="test" onclick="check(this.id)"> 
+                    </div>
+                  </div >
+                  <%= re[j].Course %>
+                </div>
+                <%}%>
+            <%}%>
+       
+  </div>
+  <br><br>
+  <%}%>
+<br>
+<br>
+
+        
+        
+<div class="footer">
+  <h5 class="text-center">Press Submit</h5>
+  <div class="row justify-content-center">
+    <input type="submit" class="button" value="SUBMIT" onclick="submit()">
+  </div>
+  
+</div>
+</form>
+
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HOD</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="hod.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div>
+      <h1>
+        Courses Offered By Department
+      </h1>
+      <h4>
+        <strong>Signed in as HOD Of <%=dept[0].Name%></strong>
+      </h4>
+      <form action="/logout" method="get">
+        <div style="background-color:rgb(231, 231, 150);">
+         <div class="float-right">
+            <a href="#" class="btn btn-info btn-lg">
+              <button type="submit" class="glyphicon glyphicon-log-out"></button> Log out
+            </a>
+          </div>
+        </div>
+      </form>  
+    </div>
+
+    <div
+      style="padding-left: 5%; background:rgb(54, 123, 180); padding-top:13%;padding-bottom: 20%;  margin-top:70px;"
+    >
+      <h4 style="color:white;">
+        Please Select the courses offered by the Department
+      </h4>
+
+      <form action="/HOD/course" method="POST">
+        <table>
+          <tr>
+            <th style="color:white;">Course</th>
+          </tr>
+          <%for(var i=0;i<re.length;i++) {%>
+          <tr>
+            <td style="color:white;">
+              <input type="checkbox" name="course" value="<%= re[i].CID %>" /><%=re[i].CID %> - <%=re[i].Course%>
+            </td>
+          </tr>
+          <%}%>
+        </table>
+
+        <div style="padding-top: 10px;">
+          <!-- <input type="submit" value="Submit" class="btn btn-danger" /> -->
+          <!-- Trigger the modal with a button -->
+          <button
+            type="submit"
+            class="btn btn-danger btn-lg"
+            data-toggle="modal"
+            data-target="#myModal"
+          >
+            Submit
+          </button>
+
+          <!-- Modal -->
+          <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <h4 style="text-align:center;">
+                    Successfully submitted course details
+                  </h4>
+                  <p
+                    style="text-align:center;color:crimson;font-weight:bold;font-size: xx-large ;"
+                  >
+                    THANK YOU
+                  </p>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-default"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </body>
+  <footer>
+    <p
+      style=" position: fixed;
+    left: 0;
+    
+    bottom: 0;
+    width: 100%;
+    background-color: crimson;
+    color: white;
+    text-align: center;"
+    >
+      Global Elective ©College of Engineering , Thiruvananthapuram
+    </p>
+  </footer>
+</html>
