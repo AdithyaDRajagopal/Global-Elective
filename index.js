@@ -26,7 +26,7 @@ var hodcnt = 0;
 app.get("/",function(req,res){
 	student.count({},function(err,c){
 		if(stdcnt == c) {
-			student.find({}).sort({"cgpa": 1}.exec(function(err,result){
+			student.find({}).sort({"cgpa": 1}).exec(function(err,result){
 					for(var i=0;i<result.length;i++){
 						var sid = result[i].Username
 						var person = {"SID":result[i].Username}
@@ -55,7 +55,7 @@ app.get("/",function(req,res){
 							}
 						})
 					}
-			}))
+			})
 		}
 	})
 
